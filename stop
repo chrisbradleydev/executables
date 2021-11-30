@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+pid=$(lsof -ti tcp:$1)
+if [[ $pid ]]; then
+  kill -9 $pid
+fi

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+settings="$HOME/Library/Application Support/Code/User/settings.json"
+if [ "$(uname)" = "Darwin" ]; then
+	gsed -i "s/\(\"window.zoomLevel\": \)[-0-9.]\+/\1$1/" "$settings"
+fi

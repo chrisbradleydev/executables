@@ -2,10 +2,10 @@
 
 osascript <<EOF
 tell application "Google Chrome"
-  reopen
-  activate
-  tell application "System Events"
-    tell process "Google Chrome" to key code 15 using {command down, shift down}
-  end tell
+	reopen
+	activate
+	tell application "System Events"
+		tell process "Google Chrome" to key code 15 using {command down, shift down}
+	end tell
 end tell
 EOF

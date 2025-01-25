@@ -1,6 +1,30 @@
 #!/usr/bin/env bash
 
-settings="$HOME/Library/Application Support/Code/User/settings.json"
-if [ "$(uname)" = "Darwin" ]; then
-	gsed -i "s/\(\"window.zoomLevel\": \)[-0-9.]\+/\1$1/" "$settings"
-fi
+# Function to find immediate subdirectories of a given path
+# Returns each subdirectory path on a new line, preserving spaces in paths
+get_subdirs() {
+	local dir="$1"
+	local -a subdirs=()
+	
+	while IFS= read -r subdir; do
+		subdirs+=("$subdir")
+	done < <(find "$dir" -type d -mindepth 1 -maxdepth 1)
+	
+	printf "%s\n" "${subdirs[@]}"
+}
+
+# Initialize array with VS Code's main settings directory
+dirs=("$HOME/Library/Application Support/Code/User")
+# Get all profile directories and store them in a temporary array
+mapfile -t secondary_dirs < <(get_subdirs "$HOME/Library/Application Support/Code/User/profiles")
+# Append profile directories to main array
+dirs+=("${secondary_dirs[@]}")
+
+# Process each directory to update the zoom level in settings.json
+for dir in "${dirs[@]}"; do
+	settings="$dir/settings.json"
+	# On macOS, update the window.zoomLevel value with the provided argument ($1)
+	if [ "$(uname)" = "Darwin" ]; then
+		gsed -i "s/\(\"window.zoomLevel\": \)[-0-9.]\+/\1$1/" "$settings"
+	fi
+done

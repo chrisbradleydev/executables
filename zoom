@@ -14,7 +14,10 @@ get_subdirs() {
 }
 
 # Initialize array with VS Code's main settings directory
-dirs=("$HOME/Library/Application Support/Code/User")
+dirs=(
+    "$HOME/Library/Application Support/Code/User"
+    "$HOME/Library/Application Support/Cursor/User"
+)
 # Get all profile directories and store them in a temporary array
 mapfile -t secondary_dirs < <(get_subdirs "$HOME/Library/Application Support/Code/User/profiles")
 # Append profile directories to main array

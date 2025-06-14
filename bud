@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# Get the current directory name for the archive filename
+CURRENT_DIR=$(basename "$(pwd)")
+ARCHIVE_NAME="${CURRENT_DIR}.tar.gz"
+DEST_DIR="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Projects"
+
+# Check if destination directory exists
+if [ ! -d "$DEST_DIR" ]; then
+    echo "Error: Destination directory does not exist: $DEST_DIR"
+    exit 1
+fi
+
+echo "Archiving $CURRENT_DIR..."
+
+# Create tar.gz archive of current directory (excluding the archive itself if it exists)
+cd ..
+tar --exclude="$ARCHIVE_NAME" -zcf "$ARCHIVE_NAME" "./$CURRENT_DIR"
+
+# Check if archive was created successfully
+if [ ! -f "$ARCHIVE_NAME" ]; then
+    echo "Failed to create archive"
+    exit 1
+fi
+
+# Move the archive to the destination directory
+mv "$ARCHIVE_NAME" "$DEST_DIR/"
+
+# Check if move was successful
+if [ -f "$DEST_DIR/$ARCHIVE_NAME" ]; then
+    echo "Success"
+else
+    echo "Failed to archive"
+    exit 1
+fi
